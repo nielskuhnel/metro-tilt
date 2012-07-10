@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+        <style type="text/css">  
+            .outer {
+                width: 200px;
+                height: 200px;
+                -moz-perspective: 600;      
+                -ie-perspective: 600;      
+                -webkit-perspective: 600;      
+                perspective: 600;
+                float: left;               
+                margin: 10px;
+            }
+            
+        
+            body { font-size: 14px; font-family: helvetica neue, arial;}
+        
+            .button {
+                transition: all .1s ease-in-out;            
+                -ie-transition: all .1s ease-in-out;            
+                -moz-transition: all .1s ease-in-out;
+                -webkit-transition: all .1s ease-in-out;
+                width: 180px;
+                height: 180px;
+                background-color: #77aaff;    
+                color:white;                
+                padding: 10px;
+                font-weight: bold;                
+            }
+                                            
+        </style>
+        
+        <script type="text/javascript">            
+        
+            $(function() {   
+                var down = function(e) {
+                    var pos = $(this).offset();
+                    
+                    //x relative to element between -1 and 1
+                    var x = 2*((e.pageY - pos.top) / $(this).height() - .5);
+                    
+                    //y relative to element between -1 and 1
+                    var y = 2*((e.pageX - pos.left) / $(this).width() - .5);
+                    
+                    //Only "push" the button into the view when clicked in the middle (edges not at all)
+                    var z = -Math.round((1 - Math.max(Math.abs(x), Math.abs(y)))*20);                   
+                                        
+                    x = -Math.round(x*7);
+                    y = Math.round(y*7);
+                    
+                                                       
+                    $(".button", this).cssPrefixed("transform", "rotateX(" + x + "deg) rotateY(" + y + "deg) translateZ(" + z + "px)");                    
+                };
+                
+                var up = function(e) {
+                    $(".button", this).cssPrefixed("transform", "");
+                };
+            
+                $(".outer").bind("mousedown", down).bind("touchstart", down)
+                    .bind("mouseup", up).bind("touchend", up);
+                    
+                
+                
+                $.fn.cssPrefixed = function(name, val) {
+                   return $(this).css("-webkit-" + name, val).css("-moz-" + name, val).css("-ie-" + name, val).css(name, val)
+                };
+            });
+        </script>
+    </head>
+    <body>
+    <h1>Metro/Windows Phone like tilt animation</h1>
+    <h3>Try clicking the buttons in a webkit browser (Chrome or Safari)</h3>
+    <div>(Animation starts on mousedown and ends on mouseup. View source for details)</div>
+    
+    <div class="outer">
+        <div class="button">I'm, like, so metro.</div>
+    </div>
+    
+    <div class="outer">
+        <div class="button">I'm metro too.</div>
+    </div>
+    
+    </body>
+</html>
